@@ -362,7 +362,9 @@ class MainActivity : AppCompatActivity(), BtChatService.Listener {
         }
         toast("Определяю местоположение…")
         try {
-            LocationManagerCompat.getCurrentLocation(lm, provider, null, ContextCompat.getMainExecutor(this)) { location ->
+            // тип сигнала указан явно, иначе компилятор путает две версии getCurrentLocation
+            val cancel: android.os.CancellationSignal? = null
+            LocationManagerCompat.getCurrentLocation(lm, provider, cancel, ContextCompat.getMainExecutor(this)) { location: Location? ->
                 val loc = location ?: lastKnownLocation(lm)
                 if (loc != null) {
                     val text = String.format(Locale.US, "%s%.6f,%.6f", GEO_PREFIX, loc.latitude, loc.longitude)
